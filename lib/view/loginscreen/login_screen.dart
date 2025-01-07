@@ -73,7 +73,11 @@ class LoginScreen extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         fontSize: 16),
                   ),
-                  Customtextformfield(hintText: "", controller: password),
+                  Customtextformfield(
+                    hintText: "",
+                    controller: password,
+                    isPassword: true,
+                  ),
                   SizedBox(
                     height: 25,
                   ),
