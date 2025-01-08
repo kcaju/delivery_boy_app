@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class HeaderBox extends StatefulWidget {
-  const HeaderBox({super.key, this.onMenuTap});
+  const HeaderBox({super.key, this.onMenuTap, this.onDropdownSelection});
   final void Function()? onMenuTap;
+  final void Function(int)? onDropdownSelection;
 
   @override
   State<HeaderBox> createState() => _HeaderBoxState();
@@ -28,7 +29,7 @@ class _HeaderBoxState extends State<HeaderBox> {
               //titlebox
               Padding(
                 padding: EdgeInsets.symmetric(
-                    vertical: 6, horizontal: isMobile ? 15 : 45),
+                    vertical: isMobile ? 2 : 6, horizontal: isMobile ? 15 : 45),
                 child: Container(
                   padding: EdgeInsets.all(5),
                   color: Colors.white,
@@ -87,22 +88,7 @@ class _HeaderBoxState extends State<HeaderBox> {
                     ),
                   ],
                 ),
-                onSelected: (value) {
-                  // Handle any selection if required
-                  // if (value == 1) {
-                  //   //Navigate to the Sign In screen
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(builder: (context) => SigninScreen()),
-                  //   );
-                  // } else if (value == 2) {
-                  //   // Navigate to the Sign Up screen
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(builder: (context) => SignupScreen()),
-                  //   );
-                  // }
-                },
+                onSelected: widget.onDropdownSelection,
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     value: 1,

@@ -33,6 +33,7 @@ class Customtextformfield extends StatelessWidget {
                 }
               },
         controller: controller,
+        keyboardType: TextInputType.text,
         decoration: InputDecoration(
             hintText: hintText,
             hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 16),

@@ -2,9 +2,17 @@ import 'package:delivery_boy_app/view/homescreen/home_screen.dart';
 import 'package:delivery_boy_app/view/loginscreen/widget/customtextformfield.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController uname = TextEditingController();
+  TextEditingController password = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     // Use MediaQuery to get screen width and height
@@ -16,9 +24,6 @@ class LoginScreen extends StatelessWidget {
     bool isTablet = screenWidth >= 600 && screenWidth <= 1024;
     bool isDesktop = screenWidth > 1024;
 
-    TextEditingController uname = TextEditingController();
-    TextEditingController password = TextEditingController();
-    final formKey = GlobalKey<FormState>();
     return Scaffold(
       body: Center(
         child: Padding(
