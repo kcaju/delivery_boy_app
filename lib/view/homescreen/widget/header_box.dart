@@ -88,7 +88,8 @@ class _HeaderBoxState extends State<HeaderBox> {
                     ),
                   ],
                 ),
-                onSelected: widget.onDropdownSelection,
+                onSelected:
+                    widget.onDropdownSelection, //dropdown selection press
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     value: 1,
