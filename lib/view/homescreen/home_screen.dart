@@ -111,22 +111,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }),
                 //main contents
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      isPreviousOrder
-                          ? PreviousorderBox()
-                          : isNewOrder
-                              ? NewordersBox()
-                              : isDashbord
-                                  ? DashboardCards()
-                                  : isChangePassword
-                                      ? ChangepasswordScreen()
-                                      : SizedBox()
-                    ],
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        isPreviousOrder
+                            ? PreviousorderBox()
+                            : isNewOrder
+                                ? NewordersBox()
+                                : isDashbord
+                                    ? DashboardCards()
+                                    : isChangePassword
+                                        ? ChangepasswordScreen()
+                                        : SizedBox()
+                      ],
+                    ),
                   ),
                 )
               ],
