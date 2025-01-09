@@ -40,31 +40,8 @@ class NewordersBox extends StatelessWidget {
         'Address': 'Puthiya veetil house',
         'Shipcharge': '4.95',
         'Payment': 'COD',
-        'Status1': Container(
-          height: 40,
-          width: isDesktop ? 80 : 110,
-          padding: EdgeInsets.only(left: isDesktop ? 5 : 0),
-          child: Center(
-              child: Text(
-            "Complete Delivery",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
-          )),
-          decoration: BoxDecoration(
-              color: Colors.green, borderRadius: BorderRadius.circular(8)),
-        ),
-        'Status2': Container(
-          height: 40,
-          width: 80,
-          child: Center(
-              child: Text(
-            "Cancel",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
-          )),
-          decoration: BoxDecoration(
-              color: Colors.red, borderRadius: BorderRadius.circular(8)),
-        ),
+        'Status1': "Complete Delivery",
+        'Status2': "Cancel",
         'Action': '',
         'Totalprice': '15.95',
         'Totalitems': '1'
@@ -75,34 +52,8 @@ class NewordersBox extends StatelessWidget {
         'Address': 'Cholakottile',
         'Shipcharge': '0.0',
         'Payment': 'COD',
-        'Status1': Container(
-          padding: EdgeInsets.only(left: isDesktop ? 5 : 0),
-          height: 40,
-          width: isDesktop ? 80 : 110,
-          child: Center(
-              child: Text(
-            "Complete Delivery",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
-          )),
-          decoration: BoxDecoration(
-              color: Colors.green, borderRadius: BorderRadius.circular(8)),
-        ),
-        'Status2': Container(
-          height: 40,
-          width: 80,
-          child: Center(
-              child: Text(
-            "Cancel",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          )),
-          decoration: BoxDecoration(
-              color: Colors.red, borderRadius: BorderRadius.circular(8)),
-        ),
+        'Status1': 'Complete Delivery',
+        'Status2': 'Cancel',
         'Action': '',
         'Totalprice': '123.14999999',
         'Totalitems': '4'
@@ -258,9 +209,40 @@ class NewordersBox extends StatelessWidget {
                     DataCell(
                       Row(
                         children: [
-                          order['Status1'],
+                          //completebuton
+                          Container(
+                            height: 40,
+                            width: isDesktop ? 80 : 110,
+                            padding: EdgeInsets.only(left: isDesktop ? 5 : 0),
+                            child: Center(
+                                child: Text(
+                              order['Status1'],
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
+                            )),
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(8)),
+                          ),
                           SizedBox(width: 4),
-                          order['Status2'],
+                          //cancel buton
+                          Container(
+                            height: 40,
+                            width: 80,
+                            child: Center(
+                                child: Text(
+                              order['Status2'],
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
+                            )),
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(8)),
+                          ),
                         ],
                       ),
                     ),
