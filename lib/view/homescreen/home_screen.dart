@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isDashbord = false;
+  bool isDashbord = true;
   bool isPreviousOrder = false;
   bool isNewOrder = false;
   bool isChangePassword = false;

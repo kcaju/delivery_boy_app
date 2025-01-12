@@ -5,25 +5,6 @@ class PreviousorderBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ScrollController _scrollController = ScrollController();
-    void scrollRight() {
-      _scrollController.animateTo(
-        _scrollController.offset +
-            320, // Scroll by 320px (card width + spacing)
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
-
-    void scrollLeft() {
-      _scrollController.animateTo(
-        _scrollController.offset -
-            320, // Scroll by 320px (card width + spacing)
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
-
     // Use MediaQuery to get screen width and height
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -91,7 +72,6 @@ class PreviousorderBox extends StatelessWidget {
 
         //table
         SingleChildScrollView(
-          controller: _scrollController,
           scrollDirection: Axis.horizontal,
           child: DataTable(
             columns: const [
@@ -228,41 +208,6 @@ class PreviousorderBox extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            GestureDetector(
-              onTap: scrollLeft,
-              child: CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.lightGreen.shade200,
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  size: 16,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 15,
-            ),
-            GestureDetector(
-              onTap: scrollRight,
-              child: CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.lightGreen.shade200,
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 16,
-                  color: Colors.black,
-                ),
-              ),
-            )
-          ],
-        )
       ],
     );
   }
