@@ -4,6 +4,8 @@ import 'package:delivery_boy_app/view/homescreen/widget/dashboard_cards.dart';
 import 'package:delivery_boy_app/view/homescreen/widget/header_box.dart';
 import 'package:delivery_boy_app/view/homescreen/widget/neworders_box.dart';
 import 'package:delivery_boy_app/view/homescreen/widget/previousorder_box.dart';
+import 'package:delivery_boy_app/view/loginscreen/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -84,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 //header section
                 Builder(builder: (context) {
                   return HeaderBox(
-                    onDropdownSelection: (p0) {
+                    onDropdownSelection: (p0) async {
                       if (p0 == 1) {
                         setState(() {
                           isChangePassword = true;
@@ -92,6 +94,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           isPreviousOrder = false;
                           isNewOrder = false;
                         });
+                      } else if (p0 == 2) {
+                        await FirebaseAuth.instance.signOut();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.green,
+                            content: Text(
+                              "Signed Out Successfully",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            )));
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(),
+                          ),
+                          (route) => false,
+                        );
                       }
                     },
                     onMenuTap: () {

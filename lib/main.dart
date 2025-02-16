@@ -1,7 +1,16 @@
+import 'package:delivery_boy_app/controller/signin_screen_controller.dart';
+import 'package:delivery_boy_app/firebase_options.dart';
 import 'package:delivery_boy_app/view/loginscreen/login_screen.dart';
+import 'package:delivery_boy_app/view/loginscreen/widget/intermediate_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
@@ -10,9 +19,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => SigninScreenController(),
+        )
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: IntermediateScreen(),
+      ),
     );
   }
 }

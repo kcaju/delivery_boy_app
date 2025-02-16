@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class PreviousorderBox extends StatelessWidget {
@@ -5,6 +7,17 @@ class PreviousorderBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get Firestore and Auth instances
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+
+    // Get current user ID
+    final String userId = auth.currentUser!.uid;
+
+    // Create a stream to listen to the current user's document
+    final Stream<DocumentSnapshot> userStream =
+        firestore.collection('previousOrders').doc(userId).snapshots();
+
     // Use MediaQuery to get screen width and height
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -71,143 +84,149 @@ class PreviousorderBox extends StatelessWidget {
         ),
 
         //table
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: DataTable(
-            columns: const [
-              DataColumn(
-                  label: Text(
-                '#',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 18),
-              )),
-              DataColumn(
-                  label: Text(
-                'OrderId',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 16),
-              )),
-              DataColumn(
-                  label: Text(
-                'Address',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 16),
-              )),
-              DataColumn(
-                  label: Text(
-                'Total Items',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 16),
-              )),
-              DataColumn(
-                  label: Text(
-                'Shipping Charge',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 16),
-              )),
-              DataColumn(
-                  label: Text(
-                'Total Price',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 16),
-              )),
-              DataColumn(
-                  label: Text(
-                'Payment Method',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 16),
-              )),
-              DataColumn(
-                  label: Text(
-                'Status',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 16),
-              )),
-            ],
-            rows: List.generate(
-              orders.length,
-              (index) {
-                final order = orders[index];
-                return DataRow(
-                  cells: [
-                    DataCell(Text(
-                      order['#']!,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    )),
-                    DataCell(Text(
-                      order['Orderid']!,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    )),
-                    DataCell(Text(
-                      order['Address']!,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    )),
-                    DataCell(Text(
-                      order['Totalitems']!,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    )),
-                    DataCell(Text(
-                      order['Shipcharge']!,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    )),
-                    DataCell(Text(
-                      order['Totalprice']!,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    )),
-                    DataCell(Text(
-                      order['Payment']!,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    )),
-                    DataCell(Text(
-                      order['Status']!,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    )),
-                  ],
-                );
-              },
-            ),
-          ),
-        ),
+        StreamBuilder<DocumentSnapshot>(
+          stream: userStream,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (!snapshot.hasData || !snapshot.data!.exists) {
+              return const Center(child: Text("No orders found."));
+            }
+
+            // Get the previousOrders array from the document
+            var data = snapshot.data!.data() as Map<String, dynamic>;
+            List<dynamic> orders = data['previousOrders'] ?? [];
+
+            if (orders.isEmpty) {
+              return const Center(child: Text("No orders found."));
+            }
+
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                columns: const [
+                  DataColumn(
+                      label: Text(
+                    '#',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 18),
+                  )),
+                  DataColumn(
+                      label: Text(
+                    'OrderId',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16),
+                  )),
+                  DataColumn(
+                      label: Text(
+                    'Address',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16),
+                  )),
+                  DataColumn(
+                      label: Text(
+                    'Total Items',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16),
+                  )),
+                  DataColumn(
+                      label: Text(
+                    'Total Price',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16),
+                  )),
+                  DataColumn(
+                      label: Text(
+                    'Payment Method',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16),
+                  )),
+                  DataColumn(
+                      label: Text(
+                    'Status',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16),
+                  )),
+                ],
+                rows: List.generate(
+                  orders.length,
+                  (index) {
+                    final order = orders[index] as Map<String, dynamic>;
+                    return DataRow(
+                      cells: [
+                        DataCell(Text(
+                          (index + 1).toString(),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14),
+                        )),
+                        DataCell(Text(
+                          order['orderId'] ?? 'N/A',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14),
+                        )),
+                        DataCell(Text(
+                          order['address'] ?? 'N/A',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14),
+                        )),
+                        DataCell(Text(
+                          order['totalItems']?.toString() ?? '0',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14),
+                        )),
+                        DataCell(Text(
+                          order['totalPrice']?.toString() ?? '0.00',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14),
+                        )),
+                        DataCell(Text(
+                          order['paymentMethod'] ?? 'N/A',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14),
+                        )),
+                        DataCell(Text(
+                          "Delivered",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14),
+                        )),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            );
+          },
+        )
       ],
     );
   }

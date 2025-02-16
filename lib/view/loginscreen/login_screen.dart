@@ -1,6 +1,10 @@
-import 'package:delivery_boy_app/view/homescreen/home_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:delivery_boy_app/controller/signin_screen_controller.dart';
 import 'package:delivery_boy_app/view/loginscreen/widget/customtextformfield.dart';
+import 'package:delivery_boy_app/view/loginscreen/widget/intermediate_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,6 +17,9 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController uname = TextEditingController();
   TextEditingController password = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
+  // Firestore instance
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     // Use MediaQuery to get screen width and height
@@ -23,6 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
     bool isMobile = screenWidth < 600;
     bool isTablet = screenWidth >= 600 && screenWidth <= 1024;
     bool isDesktop = screenWidth > 1024;
+
+    final provOb = context.watch<SigninScreenController>();
 
     return Scaffold(
       body: Center(
@@ -89,13 +98,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   //login button
                   Center(
                     child: GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         if (formKey.currentState!.validate()) {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomeScreen(),
-                              ));
+                          provOb.onSignIn(
+                              email: uname.text,
+                              pass: password.text,
+                              context: context);
                         }
                       },
                       child: Container(

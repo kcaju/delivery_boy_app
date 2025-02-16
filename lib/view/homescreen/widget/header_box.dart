@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HeaderBox extends StatefulWidget {
@@ -10,6 +12,42 @@ class HeaderBox extends StatefulWidget {
 }
 
 class _HeaderBoxState extends State<HeaderBox> {
+  String profileUrl = "";
+  String userName = "STAFF"; // Default value
+  bool isLoading = true; // To handle loading state
+
+  Future<void> fetchUserData() async {
+    try {
+      String uid = FirebaseAuth.instance.currentUser?.uid ?? "";
+
+      if (uid.isNotEmpty) {
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('Partners')
+            .doc(uid)
+            .get();
+
+        if (userDoc.exists) {
+          setState(() {
+            profileUrl = userDoc['url'] ?? ""; // Profile image URL
+            userName = userDoc['name'] ?? "STAFF"; // Name field
+          });
+        }
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    fetchUserData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Use MediaQuery to get screen width and height
@@ -69,6 +107,8 @@ class _HeaderBoxState extends State<HeaderBox> {
             children: [
               CircleAvatar(
                 backgroundColor: Colors.grey,
+                backgroundImage:
+                    profileUrl.isNotEmpty ? NetworkImage(profileUrl) : null,
                 radius: isMobile ? 18 : 20,
               ),
               SizedBox(
@@ -78,7 +118,7 @@ class _HeaderBoxState extends State<HeaderBox> {
                 child: Row(
                   children: [
                     Text(
-                      "STAFF",
+                      userName.toUpperCase(),
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                     Icon(
@@ -91,14 +131,14 @@ class _HeaderBoxState extends State<HeaderBox> {
                 onSelected:
                     widget.onDropdownSelection, //dropdown selection press
                 itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 1,
-                    child: Text(
-                      "Change Password",
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.normal),
-                    ),
-                  ),
+                  // PopupMenuItem(
+                  //   value: 1,
+                  //   child: Text(
+                  //     "Change Password",
+                  //     style: TextStyle(
+                  //         color: Colors.black, fontWeight: FontWeight.normal),
+                  //   ),
+                  // ),
                   PopupMenuItem(
                     value: 2,
                     child: Text(
