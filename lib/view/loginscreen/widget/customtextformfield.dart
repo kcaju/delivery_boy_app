@@ -34,8 +34,10 @@ class Customtextformfield extends StatelessWidget {
               },
         controller: controller,
         keyboardType: TextInputType.text,
+        obscureText: isPassword ? true : false,
         decoration: InputDecoration(
             hintText: hintText,
+            suffixIcon: isPassword ? Icon(Icons.visibility) : SizedBox(),
             hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 16),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
